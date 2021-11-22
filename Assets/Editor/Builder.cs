@@ -13,17 +13,19 @@ public class Builder : MonoBehaviour
 	public static void BuildAndroid()
 	{
 		Debug.Log("[Build] Android Starting..");
+		EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Gradle;
+		PlayerSettings.Android.blitType = AndroidBlitType.Always;
 		
 		var outdir = System.Environment.CurrentDirectory + "/BuildOutPutPath/";
 		var outputPath = Path.Combine(outdir, string.Format("Android/{0}-{1}({2}).apk", Application.productName, Application.version, PlayerSettings.Android.bundleVersionCode));
 
-		BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-		buildPlayerOptions.scenes = new[] { "Assets/Scenes/MainScene.unity"};
-		buildPlayerOptions.locationPathName = outputPath;
-		buildPlayerOptions.target = BuildTarget.Android;
-		buildPlayerOptions.options = BuildOptions.None;
+		BuildPlayerOptions buildOptions = new BuildPlayerOptions();
+		buildOptions.scenes = new[] { "Assets/Scenes/MainScene.unity"};
+		buildOptions.locationPathName = outputPath;
+		buildOptions.target = BuildTarget.Android;
+		buildOptions.options = BuildOptions.None;
 
-		BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+		BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
 		BuildSummary summary = report.summary;
 
 		Debug.LogFormat("[Build] Android Finish. Report: summary: {0}, errors: {1}", report.summary.result, report.summary.totalErrors);
@@ -43,17 +45,20 @@ public class Builder : MonoBehaviour
 	public static void BuildIOS()
 	{
 		Debug.Log("[Build] iOS Starting..");
+		
+		PlayerSettings.iOS.appleDeveloperTeamID = "52F84HB9JC";
+		PlayerSettings.iOS.appleEnableAutomaticSigning = true;
 
 		var outdir = System.Environment.CurrentDirectory + "/BuildOutPutPath/";
 		var outputPath = Path.Combine(outdir, string.Format("iOS/{0}-{1}({2})", Application.productName, Application.version, PlayerSettings.Android.bundleVersionCode));
 		
-		BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-		buildPlayerOptions.scenes = new[] { "Assets/Scenes/MainScene.unity"};
-		buildPlayerOptions.locationPathName = outputPath;
-		buildPlayerOptions.target = BuildTarget.iOS;
-		buildPlayerOptions.options = BuildOptions.None;
+		BuildPlayerOptions buildOptions = new BuildPlayerOptions();
+		buildOptions.scenes = new[] { "Assets/Scenes/MainScene.unity"};
+		buildOptions.locationPathName = outputPath;
+		buildOptions.target = BuildTarget.iOS;
+		buildOptions.options = BuildOptions.None;
 
-		BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+		BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
 		BuildSummary summary = report.summary;
 
 		Debug.Log("[Build] iOS Finish. Report: " + report);
